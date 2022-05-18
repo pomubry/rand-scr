@@ -1,0 +1,176 @@
+#!/bin/python3
+
+# Dont use if FFmpeg builds other than [https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz] is installed
+# or if you have ffmpeg or yt-dlp outside of ~/bin
+
+from os.path import join
+import os
+import stat
+import shutil
+import tarfile
+import subprocess
+from textwrap import indent
+import requests
+import re
+import urllib.request
+
+# Add check if binaries exist
+home = os.path.expanduser("~")
+downloadsDir = join(home, 'Downloads')
+binDir = join(home, 'bin')
+
+binaries = {
+    "ffmpeg": {
+        'isPresent': False,
+        'checkVer': ['ffmpeg', '-version'],
+        'versionRegex': 'N-\d{5}-\w+',
+        'remoteSrc': 'https://johnvansickle.com/ffmpeg/git-readme.txt',
+        'downloadSrc': 'https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz'
+    },
+    "lux": {
+        'isPresent': False,
+        'checkVer': ['lux', '--version'],
+        'versionRegex': 'v\d{1,2}\.\d{1,2}\.\d{1,2}',
+        'remoteSrc': 'https://api.github.com/repos/iawia002/lux/releases/latest',
+        'remoteFilename': 'Linux_64-bit'
+    },
+    "yt-dlp": {
+        'isPresent': False,
+        'checkVer': ['yt-dlp', '--version'],
+        'versionRegex': '\d{4}\.\d{2}\.\d{2}',
+        'remoteSrc': 'https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest',
+        'remoteFilename': 'yt-dlp'
+    }
+}
+
+
+def compareVersion(binary, localVersionUntrimmed):
+    remoteVersion = binaries[binary]['remoteVersion']
+    localVersionTrimmed = re.search(
+        binaries[binary]['versionRegex'], localVersionUntrimmed).group()
+    if binary == 'ffmpeg':
+        localVersionTrimmed = localVersionTrimmed[9:]
+
+    return localVersionTrimmed in remoteVersion
+
+
+def getDownloadlURL(binObj, remote):
+    # Also gets the repo version aside from download url
+    for asset in remote['assets']:
+        if binObj['remoteFilename'] in asset['name']:
+            binObj['downloadSrc'] = asset['browser_download_url']
+            break
+    binObj['remoteVersion'] = remote['tag_name']
+
+
+def getDownload(src, path):
+    urllib.request.urlretrieve(src, path)
+    print("The update has been downloaded.")
+
+
+def getPath(filename):
+    dlPath = join(downloadsDir, filename)
+    exists = os.path.exists(dlPath)
+    return {'path': dlPath, 'exists': exists}
+
+
+# Update methods
+def getFFmpeg():
+    dlPath = getPath("ffmpeg-git-amd64-static.tar.xz")
+
+    if dlPath['exists']:
+        print("Skipping download. The update already exists.")
+    else:
+        getDownload(binaries['ffmpeg']['downloadSrc'], dlPath['path'])
+
+    with tarfile.open(dlPath['path']) as f:
+        folder = f.getmembers()[0].name
+        for file in ['ffmpeg', 'ffprobe']:
+            filePath = join(folder, file)
+            f.extract(filePath, downloadsDir)
+            shutil.copy(join(downloadsDir, filePath), binDir)
+
+        rmDir = join(downloadsDir, folder)
+        print("Removing directory:", rmDir)
+        shutil.rmtree(rmDir)
+        print("Removing tar file:", dlPath['path'])
+        os.remove(dlPath['path'])
+
+
+def getLux():
+    dlPath = getPath("lux_linux_64-bit.tar.gz")
+    file = join(downloadsDir, 'lux')
+
+    if dlPath['exists']:
+        print("Skipping download. The update already exists.")
+    else:
+        getDownload(binaries['lux']['downloadSrc'], dlPath['path'])
+
+    with tarfile.open(dlPath['path']) as f:
+        f.extract('lux', downloadsDir)
+
+    shutil.copy(file, binDir)
+    print("Removing tar file:", dlPath['path'])
+    os.remove(dlPath['path'])
+    print("Removing file:", file)
+    os.remove(file)
+
+
+def getYtDlp():
+    dlPath = getPath("yt-dlp")
+
+    if dlPath['exists']:
+        print("Skipping download. The update already exists.")
+    else:
+        getDownload(binaries['yt-dlp']['downloadSrc'], dlPath['path'])
+
+    # set permission to -rwxr-xr-x
+    os.chmod(dlPath['path'], stat.S_IRWXU | stat.S_IRGRP |
+             stat.S_IXGRP | stat.S_IROTH | stat.S_IXOTH)
+    shutil.copy(dlPath['path'], binDir)
+    print("Removing file:", dlPath['path'])
+    os.remove(dlPath['path'])
+
+
+# Check binaries if it already exist, check their repo versions & download URL, then attach update methods.
+for binary in binaries:
+    binObj = binaries[binary]
+    res = requests.get(binObj['remoteSrc'])
+
+    if(shutil.which(binary) is not None):
+        binObj['isPresent'] = True
+
+    if binary == 'ffmpeg':
+        binObj['remoteVersion'] = re.search(
+            "version: \w+", res.text).group()[9:19]
+        binObj['update'] = getFFmpeg
+
+    elif binary == 'lux':
+        getDownloadlURL(binObj, res.json())
+        binObj['update'] = getLux
+
+    elif binary == 'yt-dlp':
+        getDownloadlURL(binObj, res.json())
+        binObj['update'] = getYtDlp
+
+# Update each binaries.
+for binary in binaries:
+    binObj = binaries[binary]
+
+    if binObj['isPresent']:
+        # Compare the local version and remote version if it will match.
+        localVersion = subprocess.run(
+            binObj['checkVer'], capture_output=True, text=True).stdout
+        isMatch = compareVersion(binary, localVersion)
+
+        if isMatch:
+            msg = "There is no update available for {binary}."
+            print(msg.format(binary=binary))
+        else:
+            msg = "There is a new version of {binary} available. Downloading update..."
+            print(msg.format(binary=binary))
+            binObj['update']()
+    else:
+        msg = "{binary} wasn't found in your system. Downloading {binary}..."
+        print(msg.format(binary=binary))
+        binObj['update']()

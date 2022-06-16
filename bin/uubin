@@ -1,7 +1,7 @@
 #!/bin/python3
 
 # Dont use if FFmpeg builds other than [https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz] is installed
-# or if you have ffmpeg or yt-dlp outside of ~/bin
+# or if you have FFmpeg or yt-dlp outside of ~/bin
 
 from os.path import join
 import os
@@ -20,6 +20,7 @@ binDir = join(home, 'bin')
 
 binaries = {
     "ffmpeg": {
+        'skip': True,
         'isPresent': False,
         'checkVer': ['ffmpeg', '-version'],
         'versionRegex': 'N-\d{5}-\w+',
@@ -27,6 +28,7 @@ binaries = {
         'downloadSrc': 'https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz'
     },
     "lux": {
+        'skip': False,
         'isPresent': False,
         'checkVer': ['lux', '--version'],
         'versionRegex': 'v\d{1,2}\.\d{1,2}\.\d{1,2}',
@@ -34,6 +36,7 @@ binaries = {
         'remoteFilename': 'Linux_64-bit'
     },
     "yt-dlp": {
+        'skip': True,
         'isPresent': False,
         'checkVer': ['yt-dlp', '--version'],
         'versionRegex': '\d{4}\.\d{2}\.\d{2}',
@@ -131,9 +134,15 @@ def getYtDlp():
     os.remove(dlPath['path'])
 
 
-# Check binaries if it already exist, check their repo versions & download URL, then attach update methods.
+# Check binaries if it already exist,
+# check their repo versions & download URL,
+# then attach update methods.
 for binary in binaries:
     binObj = binaries[binary]
+
+    if(binObj['skip']):
+        continue
+
     res = requests.get(binObj['remoteSrc'])
 
     if(shutil.which(binary) is not None):
@@ -155,6 +164,10 @@ for binary in binaries:
 # Update each binaries.
 for binary in binaries:
     binObj = binaries[binary]
+
+    if(binObj['skip']):
+        print("Skipping:", binary)
+        continue
 
     if binObj['isPresent']:
         # Compare the local version and remote version if it will match.

@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+# Script to encode/remux multiple video files.
+# Edit the first three variables accordingly.
+# Dependencies: Python 3, [FFmpeg/mkvmerge].
+
 import os
 import mimetypes
 from shlex import split

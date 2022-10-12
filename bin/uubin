@@ -1,7 +1,8 @@
-#!/bin/python3
+#!usr/bin/python3
 
 # Dont use if FFmpeg builds other than [https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz] is installed
-# or if you have FFmpeg or yt-dlp outside of ~/bin
+# or if you have FFmpeg or yt-dlp outside of ~/bin.
+# Dependencies: Python 3.
 
 from os.path import join
 import os

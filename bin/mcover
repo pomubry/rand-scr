@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
-# This script will add a cover art for all audio files in the directory
-# There must be a `cover.jpg` in the directory which will be used as a cover
-# All output files will be in mp3 format
-# All input files will be automatically deleted
+# This script will add a cover art for all audio files in the directory.
+# There must be a `cover.jpg` in the directory which will be used as a cover.
+# All output files will be in mp3 format.
+# All original files will be automatically deleted.
+# Dependencies: Python 3, FFmpeg
 
 import os
 import mimetypes

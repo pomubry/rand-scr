@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+# Script to shuffle either audio or video files in the directory.
+# Dependencies: Python 3, mpv.
+
 import os
 import mimetypes
 import signal

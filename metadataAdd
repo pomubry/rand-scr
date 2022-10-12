@@ -1,0 +1,53 @@
+#!/usr/bin/python3
+
+# Script to add metadata to audio files using FFmpeg.
+# The `metadata` file should be present in the current directory.
+# Make sure to edit the `metadata` file before running this script.
+# There should only be 1 audio file in the current directory.
+# Dependencies: PYthon 3, FFmpeg.
+
+import os
+import mimetypes
+from shlex import split
+import subprocess
+import sys
+
+
+def filterAudio(file):
+    fullPath = os.path.join(os.getcwd(), file)
+    guessType = mimetypes.guess_type(fullPath)
+
+    isFile = os.path.isfile(fullPath)
+    isNotNoneType = guessType[0] is not None
+
+    isTypeMatched = isNotNoneType and ('audio' in guessType[0])
+
+    if isFile and isTypeMatched:
+        return True
+    else:
+        return False
+
+
+listdir = os.listdir()
+
+if 'metadata' not in listdir:
+    print('Error: `metadata` file is not found.')
+    sys.exit()
+
+filteredDir = list(filter(filterAudio, listdir))
+filteredDirLength = len(filteredDir)
+
+if(filteredDirLength == 0):
+    print('Error: No audio file was found')
+    sys.exit()
+elif(filteredDirLength > 1):
+    print('Warning: There are more than 1 audio files found in the current directory. The metadata will only apply to the first one.')
+
+ogFilename = filteredDir[0]
+
+cmd = "ffmpeg -i './{input}' -i metadata -map_metadata 1 -c copy './placeholder_{input}'"
+cmdFormatted = cmd.format(input=ogFilename)
+
+subprocess.run(split(cmdFormatted))
+os.remove(ogFilename)
+os.rename('placeholder_' + ogFilename, ogFilename)

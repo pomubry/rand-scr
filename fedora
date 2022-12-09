@@ -1,0 +1,163 @@
+#!/usr/bin/bash
+# Tested only for Fedora
+
+append(){ # $1: text, $2: path
+    sudo=""
+    if [[ $2 != */home* ]]; then
+        sudo="sudo"
+    fi
+
+    $sudo mkdir -p $(dirname "$2") && $sudo touch "$2"
+    if [[ $(cat $2) == *"$1"* ]]; then
+        echo -e "
+        \rThe following lines were already added
+        \r=============
+        \r$1
+        \r============="
+    else
+        cat << POMU | $sudo tee -a $2 > /dev/null
+        $1
+POMU
+    fi
+}
+
+installVscodeExtension(){
+    list=(${1//'\n'/})
+    for i in ${!list[@]}; do
+        code --install-extension ${list[i]}
+    done
+}
+
+# dnf config
+append 'defaultyes=True
+max_parallel_downloads=10
+fastestmirror=True' /etc/dnf/dnf.conf
+
+sudo dnf update -y
+sudo dnf upgrade -y
+
+# rpm fusion
+echo "
+Adding RPM Fusion"
+sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
+sudo dnf groupupdate core -y
+sudo dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin -y
+sudo dnf groupupdate sound-and-video -y
+sudo dnf install intel-media-driver -y
+
+# dnf
+echo "
+Installing dnf packages"
+sudo dnf install libappindicator-gtk3 gnome-tweaks gnome-shell-extension-appindicator python3-autopep8 mpv qbittorrent mkvtoolnix mkvtoolnix-gui xclip neofetch gimp aria2 git gh -y
+
+# flatpak
+echo "
+Installing flatpak packages"
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub com.mattjakeman.ExtensionManager com.belmoussaoui.Authenticator com.discordapp.Discord org.kde.kdenlive org.x.Warpinator com.github.finefindus.eyedropper -y
+
+# Github CLI & login
+echo "
+Installing Github CLI & login"
+gh auth login
+
+# Linux config
+echo "
+Adding Linux configs"
+git clone https://github.com/pomubry/linux-config.git ~/Downloads/linux-config
+chmod +x ~/Downloads/linux-config/bin/*
+mkdir ~/bin
+cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/mumble-dark.qbtheme ~
+cp -r ~/Downloads/linux-config/Code ~/Downloads/linux-config/mpv ~/.config
+
+if [[ $(cat ~/.gitconfig) == *defaultbranch* ]]; then
+    echo "Github user/defaultbranch config already added. Skipping..."
+else
+    echo "$(cat ~/Downloads/linux-config/.gitconfig)
+$(cat ~/.gitconfig)" > ~/.gitconfig
+fi
+
+rm -rf ~/Downloads/linux-config
+
+# oh-my-posh
+echo "
+Installing oh-my-posh"
+sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
+sudo chmod +x /usr/local/bin/oh-my-posh
+mkdir ~/.poshthemes
+wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
+unzip -o ~/.poshthemes/themes.zip -d ~/.poshthemes
+chmod u+rw ~/.poshthemes/*.omp.*
+rm ~/.poshthemes/themes.zip
+
+# font for oh-my-posh
+echo "
+Installing font for oh-my-posh"
+wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaCode.zip -O ~/Downloads/cascadia-nf.zip
+mkdir ~/.fonts
+unzip -o -j ~/Downloads/cascadia-nf.zip "Caskaydia Cove Nerd Font Complete Mono Regular.otf" -d ~/.fonts
+rm ~/Downloads/cascadia-nf.zip
+
+# config for oh-my-posh
+append '
+# poshtheme config
+eval "$(oh-my-posh init bash --config ~/.poshthemes/bubblesextra.omp.json)"' ~/.bashrc
+
+# nvm
+echo "
+Installing nvm"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+
+# VSCode
+echo "
+Installing VSCode"
+sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/vscode.repo'
+
+dnf check-update
+sudo dnf install code -y
+
+# vscode extension
+echo "
+Installing VSCode extensions"
+installVscodeExtension '
+AntiAntiSepticeye.vscode-color-picker
+dbaeumer.vscode-eslint
+dotenv.dotenv-vscode
+dsznajder.es7-react-js-snippets
+esbenp.prettier-vscode
+formulahendry.auto-rename-tag
+formulahendry.code-runner
+ms-python.isort
+ms-python.python
+ms-python.vscode-pylance
+ms-toolsai.jupyter
+ms-toolsai.jupyter-keymap
+ms-toolsai.jupyter-renderers
+ms-toolsai.vscode-jupyter-cell-tags
+ms-toolsai.vscode-jupyter-slideshow
+svelte.svelte-vscode
+vscode-icons-team.vscode-icons
+zhuangtongfa.material-theme'
+
+# Veracrypt
+echo "
+Installing Veracrypt"
+veracryptCurl=$(curl https://www.veracrypt.fr/en/Downloads.html)
+veracryptLatest=$(echo "$veracryptCurl" | grep -i "Latest Stable Release" | egrep -o "[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}")
+veracryptLinks=$(echo "$veracryptCurl" | egrep -o "https://launchpad\.net/veracrypt/trunk/$veracryptLatest/&#43;download/veracrypt-$veracryptLatest-CentOS-[0-9]{1,2}-x86_64.rpm")
+veracryptLink=(${veracryptLinks//'\n'/})
+veracryptGui=${veracryptLink/&#43;/+}
+wget $veracryptGui -O ~/Downloads/veracryptGui.rpm
+sudo dnf install ~/Downloads/veracryptGui.rpm -y
+rm ~/Downloads/veracryptGui.rpm
+
+# ProtonVPN
+echo "
+Installing ProtonVPN"
+protonvpn=$(curl https://protonvpn.com/support/official-linux-vpn-fedora/ | grep "protonvpn-stable" | egrep -o "https.+\.rpm")
+wget $protonvpn -O ~/Downloads/protonvpn.rpm
+sudo dnf install ~/Downloads/protonvpn.rpm -y
+rm ~/Downloads/protonvpn.rpm
+
+echo "Done!"

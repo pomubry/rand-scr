@@ -67,7 +67,7 @@ Adding Linux configs"
 git clone https://github.com/pomubry/linux-config.git ~/Downloads/linux-config
 chmod +x ~/Downloads/linux-config/bin/*
 mkdir ~/bin
-cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/mumble-dark.qbtheme ~
+cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/mumble-dark.qbtheme ~/Downloads/linux-config/.themes ~
 cp -r ~/Downloads/linux-config/Code ~/Downloads/linux-config/mpv ~/.config
 
 if [[ $(cat ~/.gitconfig) == *defaultbranch* ]]; then
@@ -158,6 +158,8 @@ Installing ProtonVPN"
 protonvpn=$(curl https://protonvpn.com/support/official-linux-vpn-fedora/ | grep "protonvpn-stable" | egrep -o "https.+\.rpm")
 wget $protonvpn -O ~/Downloads/protonvpn.rpm
 sudo dnf install ~/Downloads/protonvpn.rpm -y
+sudo dnf update -y
+sudo dnf install protonvpn -y
 rm ~/Downloads/protonvpn.rpm
 
 echo "Done!"

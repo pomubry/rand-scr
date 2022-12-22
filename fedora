@@ -34,7 +34,6 @@ max_parallel_downloads=10
 fastestmirror=True' /etc/dnf/dnf.conf
 
 sudo dnf update -y
-sudo dnf upgrade -y
 
 # rpm fusion
 echo "
@@ -117,7 +116,6 @@ sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.m
 dnf check-update
 sudo dnf install code -y
 
-# vscode extension
 echo "
 Installing VSCode extensions"
 installVscodeExtension '
@@ -136,8 +134,10 @@ ms-toolsai.jupyter-keymap
 ms-toolsai.jupyter-renderers
 ms-toolsai.vscode-jupyter-cell-tags
 ms-toolsai.vscode-jupyter-slideshow
-svelte.svelte-vscode
+quicktype.quicktype
 vscode-icons-team.vscode-icons
+Vue.volar
+Vue.vscode-typescript-vue-plugin
 zhuangtongfa.material-theme'
 
 # Veracrypt

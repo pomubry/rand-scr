@@ -29,7 +29,8 @@ installVscodeExtension(){
 }
 
 # dnf config
-append 'defaultyes=True
+append '
+defaultyes=True
 max_parallel_downloads=10
 fastestmirror=True' /etc/dnf/dnf.conf
 

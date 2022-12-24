@@ -67,7 +67,7 @@ Adding Linux configs"
 git clone https://github.com/pomubry/linux-config.git ~/Downloads/linux-config
 chmod +x ~/Downloads/linux-config/bin/*
 mkdir ~/bin
-cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/mumble-dark.qbtheme ~/Downloads/linux-config/.themes ~
+cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/mumble-dark.qbtheme ~/Downloads/linux-config/.themes ~/Downloads/linux-config/.poshthemes ~
 cp -r ~/Downloads/linux-config/Code ~/Downloads/linux-config/mpv ~/.config
 
 if [[ $(cat ~/.gitconfig) == *defaultbranch* ]]; then
@@ -84,11 +84,11 @@ echo "
 Installing oh-my-posh"
 sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
 sudo chmod +x /usr/local/bin/oh-my-posh
-mkdir ~/.poshthemes
-wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
-unzip -o ~/.poshthemes/themes.zip -d ~/.poshthemes
+# mkdir ~/.poshthemes
+# wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
+# unzip -o ~/.poshthemes/themes.zip -d ~/.poshthemes
 chmod u+rw ~/.poshthemes/*.omp.*
-rm ~/.poshthemes/themes.zip
+# rm ~/.poshthemes/themes.zip
 
 # font for oh-my-posh
 echo "
@@ -101,7 +101,7 @@ rm ~/Downloads/cascadia-nf.zip
 # config for oh-my-posh
 append '
 # poshtheme config
-eval "$(oh-my-posh init bash --config ~/.poshthemes/bubblesextra.omp.json)"' ~/.bashrc
+eval "$(oh-my-posh init bash --config ~/.poshthemes/pdrome.omp.json)"' ~/.bashrc
 
 # nvm
 echo "

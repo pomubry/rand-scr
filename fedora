@@ -48,7 +48,7 @@ sudo dnf install intel-media-driver -y
 # dnf
 echo "
 Installing dnf packages"
-sudo dnf install libappindicator-gtk3 gnome-tweaks gnome-shell-extension-appindicator python3-autopep8 mpv qbittorrent mkvtoolnix mkvtoolnix-gui xclip neofetch gimp aria2 git gh -y
+sudo dnf install libappindicator-gtk3 gnome-tweaks gnome-shell-extension-appindicator python3-autopep8 mpv qbittorrent mkvtoolnix mkvtoolnix-gui xclip neofetch gimp aria2 git gh streamlink -y
 
 # flatpak
 echo "

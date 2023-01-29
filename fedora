@@ -121,6 +121,7 @@ echo "
 Installing VSCode extensions"
 installVscodeExtension '
 AntiAntiSepticeye.vscode-color-picker
+bradlc.vscode-tailwindcss
 dbaeumer.vscode-eslint
 dotenv.dotenv-vscode
 dsznajder.es7-react-js-snippets
@@ -136,6 +137,7 @@ ms-toolsai.jupyter-renderers
 ms-toolsai.vscode-jupyter-cell-tags
 ms-toolsai.vscode-jupyter-slideshow
 quicktype.quicktype
+ritwickdey.LiveServer
 vscode-icons-team.vscode-icons
 Vue.volar
 Vue.vscode-typescript-vue-plugin

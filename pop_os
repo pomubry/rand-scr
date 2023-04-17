@@ -34,7 +34,7 @@ sudo apt upgrade -y
 # apt
 echo "
 Installing apt packages"
-sudo apt install python3-autopep8 xclip neofetch aria2 gimp git gh mkvtoolnix mkvtoolnix-gui streamlink -y
+sudo apt install python3-autopep8 xclip neofetch aria2 gimp git gh mkvtoolnix mkvtoolnix-gui streamlink gstreamer1.0-libav -y
 
 # flatpak
 echo "

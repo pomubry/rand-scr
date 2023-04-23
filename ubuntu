@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-# Tested only for Pop!_OS
+# Tested only for Ubuntu
 
 append(){ # $1: text, $2: path
     sudo=""
@@ -41,13 +41,15 @@ sudo apt-get autoremove
 # apt
 echo "
 Installing apt packages"
+sudo add-apt-repository ppa:flatpak/stable -y
 sudo add-apt-repository ppa:git-core/ppa -y
 sudo apt update -y
-sudo apt install git xclip neofetch aria2 gnome-tweaks -y
+sudo apt install flatpak git xclip neofetch aria2 gnome-tweaks -y
 
 # flatpak
 echo "
 Installing flatpak packages"
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install flathub org.libreoffice.LibreOffice com.belmoussaoui.Authenticator org.gimp.GIMP io.mpv.Mpv com.discordapp.Discord org.qbittorrent.qBittorrent org.kde.kdenlive org.x.Warpinator com.github.finefindus.eyedropper org.bunkus.mkvtoolnix-gui com.mattjakeman.ExtensionManager -y
 
 # Github CLI & login

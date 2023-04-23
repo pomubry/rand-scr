@@ -28,19 +28,28 @@ installVscodeExtension(){
     done
 }
 
-sudo add-apt-repository ppa:git-core/ppa -y
+
 sudo apt update -y
 sudo apt upgrade -y
+
+# Remove LibreOffice
+echo "
+Removing LibreOffice"
+sudo apt-get remove --purge libreoffice*
+sudo apt-get clean
+sudo apt-get autoremove
 
 # apt
 echo "
 Installing apt packages"
-sudo apt install python3-autopep8 xclip neofetch aria2 gimp git gh mpv mkvtoolnix mkvtoolnix-gui streamlink -y
+sudo add-apt-repository ppa:git-core/ppa -y
+sudo apt update -y
+sudo apt install git xclip neofetch aria2 gnome-tweaks -y
 
 # flatpak
 echo "
 Installing flatpak packages"
-flatpak install flathub com.belmoussaoui.Authenticator com.discordapp.Discord org.kde.kdenlive org.x.Warpinator com.github.finefindus.eyedropper -y
+flatpak install flathub org.libreoffice.LibreOffice com.belmoussaoui.Authenticator org.gimp.GIMP io.mpv.Mpv com.discordapp.Discord org.qbittorrent.qBittorrent org.kde.kdenlive org.x.Warpinator com.github.finefindus.eyedropper org.bunkus.mkvtoolnix-gui com.mattjakeman.ExtensionManager -y
 
 # Github CLI & login
 echo "
@@ -61,7 +70,14 @@ git clone https://github.com/pomubry/linux-config.git ~/Downloads/linux-config
 chmod +x ~/Downloads/linux-config/bin/*
 mkdir ~/bin
 cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/mumble-dark.qbtheme ~/Downloads/linux-config/.poshthemes ~
-cp -r ~/Downloads/linux-config/Code ~/Downloads/linux-config/mpv ~/.config
+cp -r ~/Downloads/linux-config/Code ~/.config
+mkdir -p ~/.var/app/io.mpv.Mpv/config/mpv
+cp -r ~/Downloads/linux-config/mpv/* ~/.var/app/io.mpv.Mpv/config/mpv
+
+append '
+# custom alias
+alias mpv="flatpak run io.mpv.Mpv"
+alias mkvmerge="flatpak run org.bunkus.mkvtoolnix-gui"' ~/.bashrc
 
 append '
 # bin
@@ -151,12 +167,6 @@ formulahendry.auto-rename-tag
 formulahendry.code-runner
 ms-python.isort
 ms-python.python
-ms-python.vscode-pylance
-ms-toolsai.jupyter
-ms-toolsai.jupyter-keymap
-ms-toolsai.jupyter-renderers
-ms-toolsai.vscode-jupyter-cell-tags
-ms-toolsai.vscode-jupyter-slideshow
 quicktype.quicktype
 ritwickdey.LiveServer
 vscode-icons-team.vscode-icons

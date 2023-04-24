@@ -172,6 +172,7 @@ Installing ProtonVPN"
 protonvpn=$(curl https://protonvpn.com/support/linux-ubuntu-vpn-setup/ | grep "/stable" | egrep -o "https.+\.deb")
 wget $protonvpn -O ~/Downloads/protonvpn.deb
 sudo apt install ~/Downloads/protonvpn.deb
+sudo apt update -y
 sudo apt install protonvpn
 sudo apt install gnome-shell-extension-appindicator gir1.2-appindicator3-0.1
 rm ~/Downloads/protonvpn.deb

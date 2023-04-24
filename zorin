@@ -192,6 +192,8 @@ Installing ProtonVPN"
 protonvpn=$(curl https://protonvpn.com/support/linux-ubuntu-vpn-setup/ | grep "/stable" | egrep -o "https.+\.deb")
 wget $protonvpn -O ~/Downloads/protonvpn.deb
 sudo apt install ~/Downloads/protonvpn.deb
+sudo apt update -y
+sudo apt install protonvpn
 rm ~/Downloads/protonvpn.deb
 
 echo "Done!"

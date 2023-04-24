@@ -147,6 +147,7 @@ dsznajder.es7-react-js-snippets
 esbenp.prettier-vscode
 formulahendry.auto-rename-tag
 formulahendry.code-runner
+ms-python.black-formatter
 ms-python.isort
 ms-python.python
 quicktype.quicktype

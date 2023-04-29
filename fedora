@@ -41,6 +41,7 @@ echo "
 Adding RPM Fusion"
 sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm -y
 sudo dnf groupupdate core -y
+sudo dnf swap ffmpeg-free ffmpeg --allowerasing -y
 sudo dnf groupupdate multimedia --setop="install_weak_deps=False" --exclude=PackageKit-gstreamer-plugin -y
 sudo dnf groupupdate sound-and-video -y
 sudo dnf install intel-media-driver -y
@@ -48,7 +49,7 @@ sudo dnf install intel-media-driver -y
 # dnf
 echo "
 Installing dnf packages"
-sudo dnf install libappindicator-gtk3 gnome-tweaks gnome-shell-extension-appindicator python3-autopep8 mpv qbittorrent mkvtoolnix mkvtoolnix-gui xclip neofetch gimp aria2 git gh streamlink -y
+sudo dnf install libappindicator-gtk3 gnome-tweaks gnome-shell-extension-appindicator mpv qbittorrent mkvtoolnix mkvtoolnix-gui xclip neofetch gimp aria2 git gh streamlink -y
 
 # flatpak
 echo "
@@ -67,7 +68,7 @@ Adding Linux configs"
 git clone https://github.com/pomubry/linux-config.git ~/Downloads/linux-config
 chmod +x ~/Downloads/linux-config/bin/*
 mkdir ~/bin
-cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/mumble-dark.qbtheme ~/Downloads/linux-config/.themes ~/Downloads/linux-config/.poshthemes ~
+cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/mumble-dark.qbtheme ~/Downloads/linux-config/.poshthemes ~
 cp -r ~/Downloads/linux-config/Code ~/Downloads/linux-config/mpv ~/.config
 
 if [[ $(cat ~/.gitconfig) == *defaultbranch* ]]; then

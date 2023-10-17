@@ -1,5 +1,8 @@
 #!/usr/bin/bash
-# Tested only for Ubuntu
+# Tested only for Debian
+# EDIT THE `codename` BELOW ! ! !
+
+codename="bookworm"
 
 append(){ # $1: text, $2: path
     sudo=""
@@ -25,30 +28,28 @@ sudo apt update -y
 sudo apt upgrade -y
 
 # Remove LibreOffice
-echo "
-Removing LibreOffice"
-sudo apt-get remove --purge libreoffice*
-sudo apt-get clean
-sudo apt-get autoremove
+#echo "
+#Removing LibreOffice"
+#sudo apt-get remove --purge libreoffice*
+#sudo apt-get clean
+#sudo apt-get autoremove
 
 # apt
 echo "
 Installing apt packages"
-sudo add-apt-repository ppa:flatpak/stable -y
-sudo add-apt-repository ppa:git-core/ppa -y
-sudo apt update -y
-sudo apt install flatpak git xclip neofetch aria2 gnome-tweaks -y
+sudo apt install -t $codename-backports yt-dlp streamlink -y
+sudo apt install flatpak gnome-software-plugin-flatpak mpv gimp qbittorrent kdenlive mkvtoolnix-gui git wget xclip neofetch aria2 gnome-tweaks -y
 
 # flatpak
 echo "
 Installing flatpak packages"
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install flathub org.libreoffice.LibreOffice com.belmoussaoui.Authenticator org.gimp.GIMP io.mpv.Mpv com.discordapp.Discord org.qbittorrent.qBittorrent org.kde.kdenlive org.x.Warpinator com.github.finefindus.eyedropper org.bunkus.mkvtoolnix-gui com.mattjakeman.ExtensionManager -y
+flatpak install flathub com.belmoussaoui.Authenticator　com.discordapp.Discord org.x.Warpinator com.github.finefindus.eyedropper　com.mattjakeman.ExtensionManager -y
 
 # Github CLI & login
 echo "
 Installing Github CLI & login"
-type -p curl >/dev/null || sudo apt install curl -y
+type -p curl >/dev/null || (sudo apt update && sudo apt install curl -y)
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
 && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
 && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
@@ -64,21 +65,14 @@ git clone https://github.com/pomubry/linux-config.git ~/Downloads/linux-config
 chmod +x ~/Downloads/linux-config/bin/*
 mkdir ~/bin
 cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/mumble-dark.qbtheme ~/Downloads/linux-config/.poshthemes ~
-cp -r ~/Downloads/linux-config/Code ~/.config
-mkdir -p ~/.var/app/io.mpv.Mpv/config/mpv
-cp -r ~/Downloads/linux-config/mpv/* ~/.var/app/io.mpv.Mpv/config/mpv
-
-append '
-# custom alias
-alias mpv="flatpak run io.mpv.Mpv"
-alias mkvmerge="flatpak run org.bunkus.mkvtoolnix-gui"' ~/.bashrc
+cp -r ~/Downloads/linux-config/Code ~/Downloads/linux-config/mpv ~/.config
 
 append '
 # bin
 export PATH=~/bin:$PATH' ~/.bashrc
 
 if [[ $(cat ~/.gitconfig) == *defaultbranch* ]]; then
-    echo "Github user/defaultbranch config already added. Skipping..."
+    echo -e "\nGithub user/defaultbranch config already added. Skipping..."
 else
     echo "$(cat ~/Downloads/linux-config/.gitconfig)
 $(cat ~/.gitconfig)" > ~/.gitconfig
@@ -89,8 +83,7 @@ rm -rf ~/Downloads/linux-config
 # oh-my-posh
 echo "
 Installing oh-my-posh"
-sudo wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
-sudo chmod +x /usr/local/bin/oh-my-posh
+curl -s https://ohmyposh.dev/install.sh | sudo bash -s
 # mkdir ~/.poshthemes
 # wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O ~/.poshthemes/themes.zip
 # unzip -o ~/.poshthemes/themes.zip -d ~/.poshthemes
@@ -102,7 +95,7 @@ echo "
 Installing font for oh-my-posh"
 wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaCode.zip -O ~/Downloads/cascadia-nf.zip
 mkdir ~/.fonts
-unzip -o -j ~/Downloads/cascadia-nf.zip "Caskaydia Cove Nerd Font Complete Mono Regular.otf" -d ~/.fonts
+unzip -o -j ~/Downloads/cascadia-nf.zip "CaskaydiaCoveNerdFontMono-Regular.ttf" -d ~/.fonts
 rm ~/Downloads/cascadia-nf.zip
 
 # config for oh-my-posh
@@ -132,9 +125,8 @@ sudo apt install code
 echo "
 Installing Veracrypt"
 veracryptLatest=$(curl https://www.veracrypt.fr/en/Downloads.html | grep -i "Latest Stable Release" | egrep -o "[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}")
-ubuntuVersion=$(cat /proc/version | egrep -o "[0-9]{2}\.[0-9]{2}")
-ubuntuVersion=${ubuntuVersion:0:5}
-veracryptGui="https://launchpad.net/veracrypt/trunk/$veracryptLatest/+download/veracrypt-$veracryptLatest-Ubuntu-$ubuntuVersion-amd64.deb"
+debianVersion=$(lsb_release -d | egrep -o "[0-9]{2}")
+veracryptGui="https://launchpad.net/veracrypt/trunk/$veracryptLatest/+download/veracrypt-$veracryptLatest-Debian-$debianVersion-amd64.deb"
 wget $veracryptGui -O ~/Downloads/veracryptGui.deb
 sudo apt install ~/Downloads/veracryptGui.deb -y
 rm ~/Downloads/veracryptGui.deb
@@ -142,12 +134,20 @@ rm ~/Downloads/veracryptGui.deb
 # ProtonVPN
 echo "
 Installing ProtonVPN"
-protonvpn=$(curl https://protonvpn.com/support/linux-ubuntu-vpn-setup/ | grep "/stable" | egrep -o "https.+\.deb")
+protonvpn=$(curl https://protonvpn.com/support/official-linux-vpn-debian/ | grep "/stable" | egrep -o "https.+\.deb")
 wget $protonvpn -O ~/Downloads/protonvpn.deb
 sudo apt install ~/Downloads/protonvpn.deb
 sudo apt update -y
-sudo apt install protonvpn
-sudo apt install gnome-shell-extension-appindicator gir1.2-appindicator3-0.1
+sudo apt install proton-vpn-gnome-desktop
+sudo apt install libayatana-appindicator3-1 gir1.2-ayatanaappindicator3-0.1 gnome-shell-extension-appindicator
 rm ~/Downloads/protonvpn.deb
+
+# .NET
+wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+rm packages-microsoft-prod.deb
+
+sudo apt-get update && \
+  sudo apt-get install -y dotnet-sdk-7.0
 
 echo "Done!"

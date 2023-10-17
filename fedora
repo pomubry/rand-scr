@@ -21,13 +21,6 @@ POMU
     fi
 }
 
-installVscodeExtension(){
-    list=(${1//'\n'/})
-    for i in ${!list[@]}; do
-        code --install-extension ${list[i]}
-    done
-}
-
 # dnf config
 append '
 defaultyes=True
@@ -117,28 +110,6 @@ sudo sh -c 'echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.m
 
 dnf check-update
 sudo dnf install code -y
-
-# vscode extension
-echo "
-Installing VSCode extensions"
-installVscodeExtension '
-AntiAntiSepticeye.vscode-color-picker
-bradlc.vscode-tailwindcss
-dbaeumer.vscode-eslint
-dotenv.dotenv-vscode
-dsznajder.es7-react-js-snippets
-esbenp.prettier-vscode
-formulahendry.auto-rename-tag
-formulahendry.code-runner
-ms-python.black-formatter
-ms-python.isort
-ms-python.python
-quicktype.quicktype
-ritwickdey.LiveServer
-vscode-icons-team.vscode-icons
-Vue.volar
-Vue.vscode-typescript-vue-plugin
-zhuangtongfa.material-theme'
 
 # Veracrypt
 echo "

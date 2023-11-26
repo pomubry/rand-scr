@@ -38,7 +38,7 @@ sudo apt upgrade -y
 echo "
 Installing apt packages"
 sudo apt install -t $codename-backports yt-dlp streamlink -y
-sudo apt install flatpak gnome-software-plugin-flatpak mpv gimp qbittorrent kdenlive mkvtoolnix-gui git wget xclip neofetch aria2 gnome-tweaks -y
+sudo apt install flatpak gnome-software-plugin-flatpak mpv gimp qbittorrent kdenlive mkvtoolnix-gui git wget xclip neofetch aria2 gnome-tweaks qt5ct -y
 
 # flatpak
 echo "
@@ -69,7 +69,8 @@ cp -r ~/Downloads/linux-config/Code ~/Downloads/linux-config/mpv ~/.config
 
 append '
 # bin
-export PATH=~/bin:$PATH' ~/.bashrc
+export PATH=~/bin:$PATH
+export QT_QPA_PLATFORMTHEME=qt5ct' ~/.bashrc
 
 if [[ $(cat ~/.gitconfig) == *defaultbranch* ]]; then
     echo -e "\nGithub user/defaultbranch config already added. Skipping..."

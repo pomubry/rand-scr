@@ -64,7 +64,7 @@ Adding Linux configs"
 git clone https://github.com/pomubry/linux-config.git ~/Downloads/linux-config
 chmod +x ~/Downloads/linux-config/bin/*
 mkdir ~/bin
-cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/mumble-dark.qbtheme ~/Downloads/linux-config/.poshthemes ~
+cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/mumble-dark.qbtheme ~/Downloads/linux-config/.poshthemes ~/Downloads/linux-config/.editorconfig ~
 cp -r ~/Downloads/linux-config/Code ~/Downloads/linux-config/mpv ~/.config
 
 append '

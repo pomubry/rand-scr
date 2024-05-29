@@ -94,10 +94,10 @@ chmod u+rw ~/.poshthemes/*.omp.*
 # font for oh-my-posh
 echo "
 Installing font for oh-my-posh"
-wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/CascadiaCode.zip -O ~/Downloads/cascadia-nf.zip
+wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip -O ~/Downloads/jetbrains-nf.zip
 mkdir ~/.fonts
-unzip -o -j ~/Downloads/cascadia-nf.zip "CaskaydiaCoveNerdFontMono-Regular.ttf" -d ~/.fonts
-rm ~/Downloads/cascadia-nf.zip
+unzip -o -j ~/Downloads/jetbrains-nf.zip "JetBrainsMonoNerdFont-Regular.ttf" -d ~/.fonts
+rm ~/Downloads/jetbrains-nf.zip
 
 # config for oh-my-posh
 append '

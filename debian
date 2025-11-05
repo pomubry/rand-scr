@@ -38,7 +38,7 @@ sudo apt upgrade -y
 echo "
 Installing apt packages"
 sudo apt install -t $codename-backports yt-dlp streamlink -y
-sudo apt install flatpak systemd-timesyncd gnome-software-plugin-flatpak mpv qbittorrent kdenlive mkvtoolnix-gui git wget xclip fastfetch aria2 qt5ct -y
+sudo apt install flatpak systemd-timesyncd gnome-software-plugin-flatpak mpv qbittorrent kdenlive mkvtoolnix-gui git wget xclip fastfetch aria2 qt5ct extrepo -y
 
 # flatpak
 echo "
@@ -109,6 +109,17 @@ eval "$(oh-my-posh init bash --config ~/.poshthemes/pdrome.omp.json)"' ~/.bashrc
 echo "
 Installing nvm"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+
+# Docker
+echo "
+Installing Docker"
+sudo extrepo enable docker-ce
+sudo apt update -y
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo systemctl disable --now docker.service docker.socket
+sudo rm /var/run/docker.sock
+dockerd-rootless-setuptool.sh install
+sudo systemctl start docker
 
 # VSCode
 wget "https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64" -O ~/Downloads/vscode.deb

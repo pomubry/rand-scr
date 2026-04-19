@@ -65,12 +65,13 @@ gh auth login
 echo "
 Adding Linux configs"
 git clone https://github.com/pomubry/linux-config.git ~/Downloads/linux-config
-chmod +x ~/Downloads/linux-config/bin/*
+chmod +x ~/Downloads/linux-config/bin/* mozc_edit.py
 mkdir ~/bin
 cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/mumble-dark.qbtheme ~/Downloads/linux-config/.poshthemes ~/Downloads/linux-config/.editorconfig ~
 cp -r ~/Downloads/linux-config/config/. ~/.config
 cp -r ~/Downloads/linux-config/browser ~/Downloads
 cp -r ~/Downloads/linux-config/desktop/. ~/.local/share/applications
+python3 ~/Downloads/linux-config/mozc_edit.py
 
 append '
 # bin

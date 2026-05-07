@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-# Tested only for Debian
+# Tested for Debian only
 # EDIT THE `codename` BELOW ! ! !
 
 codename="trixie"
@@ -26,13 +26,6 @@ POMU
 
 sudo apt update -y
 sudo apt upgrade -y
-
-# Remove LibreOffice
-#echo "
-#Removing LibreOffice"
-#sudo apt-get remove --purge libreoffice*
-#sudo apt-get clean
-#sudo apt-get autoremove
 
 # apt
 echo "

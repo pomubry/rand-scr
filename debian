@@ -170,4 +170,9 @@ rm ~/Downloads/protonvpn.deb
 #sudo apt-get update && \
 #  sudo apt-get install -y dotnet-sdk-8.0
 
+append $'
+# alias
+alias mpv=\'gnome-session-inhibit /usr/bin/mpv "$@"\'
+alias cdpwd=\'cd $(pwd)\'' ~/.bashrc
+
 echo "Done!"

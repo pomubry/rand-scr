@@ -65,6 +65,10 @@ cp -r ~/Downloads/linux-config/config/. ~/.config
 cp -r ~/Downloads/linux-config/browser ~/Downloads
 cp -r ~/Downloads/linux-config/desktop/. ~/.local/share/applications
 python3 ~/Downloads/linux-config/mozc_edit.py
+cp /usr/share/applications/libreoffice-calc.desktop ~/.local/share/applications/
+sed -i 's/Icon=libreoffice-calc/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/libreoffice-calc.png/' ~/.local/share/applications/libreoffice-calc.desktop
+sed -i 's/Name=LibreOffice Calc/Name=LibreOffice Excel/' ~/.local/share/applications/libreoffice-calc.desktop
+sed -i 's/OpenOffice Calc/OpenOffice Excel/' ~/.local/share/applications/libreoffice-calc.desktop
 
 append '
 # bin

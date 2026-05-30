@@ -70,6 +70,8 @@ sed -i 's/Icon=libreoffice-calc/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/
 sed -i 's/Name=LibreOffice Calc/Name=LibreOffice Excel/' ~/.local/share/applications/libreoffice-calc.desktop
 sed -i 's/OpenOffice Calc/OpenOffice Excel/' ~/.local/share/applications/libreoffice-calc.desktop
 
+git clone https://github.com/pomubry/astro-nvim ~/.config/nvim
+
 append '
 # bin
 export PATH=~/bin:$PATH

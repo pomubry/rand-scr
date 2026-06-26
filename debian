@@ -4,24 +4,24 @@
 
 codename="trixie"
 
-append(){ # $1: text, $2: path
-    sudo=""
-    if [[ $2 != */home* ]]; then
-        sudo="sudo"
-    fi
+append() { # $1: text, $2: path
+  sudo=""
+  if [[ $2 != */home* ]]; then
+    sudo="sudo"
+  fi
 
-    $sudo mkdir -p $(dirname "$2") && $sudo touch "$2"
-    if [[ $(cat $2) == *"$1"* ]]; then
-        echo -e "
+  $sudo mkdir -p $(dirname "$2") && $sudo touch "$2"
+  if [[ $(cat $2) == *"$1"* ]]; then
+    echo -e "
         \rThe following lines were already added
         \r=============
         \r$1
         \r============="
-    else
-        cat << POMU | $sudo tee -a $2 > /dev/null
+  else
+    cat <<POMU | $sudo tee -a $2 >/dev/null
         $1
 POMU
-    fi
+  fi
 }
 
 sudo apt update -y
@@ -42,15 +42,15 @@ flatpak install flathub com.belmoussaoui.Authenticator com.discordapp.Discord co
 # Github CLI & login
 echo "
 Installing Github CLI & login"
-(type -p wget >/dev/null || (sudo apt update && sudo apt install wget -y)) \
-	&& sudo mkdir -p -m 755 /etc/apt/keyrings \
-	&& out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-	&& cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
-	&& sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
-	&& sudo mkdir -p -m 755 /etc/apt/sources.list.d \
-	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-	&& sudo apt update \
-	&& sudo apt install gh -y
+(type -p wget >/dev/null || (sudo apt update && sudo apt install wget -y)) &&
+  sudo mkdir -p -m 755 /etc/apt/keyrings &&
+  out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg &&
+  cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg >/dev/null &&
+  sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg &&
+  sudo mkdir -p -m 755 /etc/apt/sources.list.d &&
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null &&
+  sudo apt update &&
+  sudo apt install gh -y
 
 gh auth login
 
@@ -78,10 +78,10 @@ export PATH=~/bin:$PATH
 export QT_QPA_PLATFORMTHEME=qt5ct' ~/.bashrc
 
 if [[ $(cat ~/.gitconfig) == *defaultbranch* ]]; then
-    echo -e "\nGithub user/defaultbranch config already added. Skipping..."
+  echo -e "\nGithub user/defaultbranch config already added. Skipping..."
 else
-    echo "$(cat ~/Downloads/linux-config/.gitconfig)
-$(cat ~/.gitconfig)" >> ~/.gitconfig
+  echo "$(cat ~/Downloads/linux-config/.gitconfig)
+$(cat ~/.gitconfig)" >>~/.gitconfig
 fi
 
 rm -rf ~/Downloads/linux-config
@@ -104,6 +104,9 @@ oh-my-posh font install jetbrainsmono
 append '
 # poshtheme config
 eval "$(oh-my-posh init bash --config ~/.poshthemes/pdrome.omp.json)"' ~/.bashrc
+
+# theme for gnome terminal
+curl -L https://raw.githubusercontent.com/catppuccin/gnome-terminal/v1.0.0/install.py | python3 -
 
 # nvm
 echo "

@@ -175,6 +175,8 @@ rm ~/Downloads/protonvpn.deb
 append $'
 # alias
 alias mpv=\'gnome-session-inhibit /usr/bin/mpv "$@"\'
-alias cdpwd=\'cd $(pwd)\'' ~/.bashrc
+alias lsa=\'du -sh -- * | sort -h\'
+alias cdpwd=\'cd $(pwd)\'
+alias cddev="cd /media/pdrome/PopoDrome/Backup/Linux/Documents/Dev/"' ~/.bashrc
 
 echo "Done!"

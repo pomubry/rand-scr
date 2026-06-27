@@ -70,12 +70,19 @@ sed -i 's/Icon=libreoffice-calc/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/
 sed -i 's/Name=LibreOffice Calc/Name=LibreOffice Excel/' ~/.local/share/applications/libreoffice-calc.desktop
 sed -i 's/OpenOffice Calc/OpenOffice Excel/' ~/.local/share/applications/libreoffice-calc.desktop
 
-git clone https://github.com/pomubry/astro-nvim ~/.config/nvim
-
 append '
 # bin
 export PATH=~/bin:$PATH
 export QT_QPA_PLATFORMTHEME=qt5ct' ~/.bashrc
+
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+sudo rm -rf /opt/nvim-linux-x86_64
+sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+
+append '
+# neovim
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+export EDITOR="nvim"' ~/.bashrc
 
 if [[ $(cat ~/.gitconfig) == *defaultbranch* ]]; then
   echo -e "\nGithub user/defaultbranch config already added. Skipping..."

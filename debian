@@ -10,15 +10,15 @@ append() { # $1: text, $2: path
     sudo="sudo"
   fi
 
-  $sudo mkdir -p $(dirname "$2") && $sudo touch "$2"
-  if [[ $(cat $2) == *"$1"* ]]; then
+  $sudo mkdir -p "$(dirname "$2")" && $sudo touch "$2"
+  if [[ $(cat "$2") == *"$1"* ]]; then
     echo -e "
         \rThe following lines were already added
         \r=============
         \r$1
         \r============="
   else
-    cat <<POMU | $sudo tee -a $2 >/dev/null
+    cat <<POMU | $sudo tee -a "$2" >/dev/null
         $1
 POMU
   fi
@@ -80,10 +80,10 @@ fi
 
 rm -rf ~/Downloads/linux-config
 
-append '
+append "
 # bin
-export PATH=$PATH:~/bin
-export QT_QPA_PLATFORMTHEME=qt5ct' ~/.bashrc
+export PATH=\$PATH:~/bin
+export QT_QPA_PLATFORMTHEME=qt5ct" ~/.bashrc
 
 # LazyVim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
@@ -96,19 +96,19 @@ unzip -d ~/bin/ tree-sitter-cli-linux-x64.zip
 chmod +x ~/bin/tree-sitter
 rm tree-sitter-cli-linux-x64.zip
 
-append '
+append "
 # neovim
-export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
-export EDITOR="nvim"
-eval "$(fzf --bash)"' ~/.bashrc
+export PATH=\$PATH:/opt/nvim-linux-x86_64/bin
+export EDITOR=nvim
+eval \"\$(fzf --bash)\"" ~/.bashrc
 ln -s "$(which fdfind)" ~/.local/bin/fd
 
 # oh-my-posh
 echo "
 Installing oh-my-posh"
-append '
+append "
 # oh-my-posh
-export PATH=$PATH:/root/.local/bin' ~/.bashrc
+export PATH=\$PATH:/root/.local/bin" ~/.bashrc
 curl -s https://ohmyposh.dev/install.sh | bash -s
 chmod u+rw ~/.poshthemes/*.omp.*
 
@@ -118,9 +118,9 @@ Installing font for oh-my-posh"
 oh-my-posh font install jetbrainsmono
 
 # config for oh-my-posh
-append '
+append "
 # poshtheme config
-eval "$(oh-my-posh init bash --config ~/.poshthemes/pdrome.omp.json)"' ~/.bashrc
+eval \"\$(oh-my-posh init bash --config ~/.poshthemes/pdrome.omp.json)\"" ~/.bashrc
 
 # theme for gnome terminal
 curl -L https://raw.githubusercontent.com/catppuccin/gnome-terminal/v1.0.0/install.py | python3 -
@@ -150,18 +150,18 @@ rm ~/Downloads/vscode.deb
 # Veracrypt
 echo "
 Installing Veracrypt"
-veracryptLatest=$(curl https://veracrypt.io/en/Downloads.html | grep -i "Latest Stable Release" | egrep -o "[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}")
-debianVersion=$(lsb_release -d | egrep -o "[0-9]{2}")
+veracryptLatest=$(curl https://veracrypt.io/en/Downloads.html | grep -i "Latest Stable Release" | grep -Eo "[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,2}")
+debianVersion=$(lsb_release -d | grep -Eo "[0-9]{2}")
 veracryptGui="https://launchpad.net/veracrypt/trunk/$veracryptLatest/+download/veracrypt-$veracryptLatest-Debian-$debianVersion-amd64.deb"
-wget $veracryptGui -O ~/Downloads/veracryptGui.deb
+wget "$veracryptGui" -O ~/Downloads/veracryptGui.deb
 sudo apt install ~/Downloads/veracryptGui.deb -y
 rm ~/Downloads/veracryptGui.deb
 
 # ProtonVPN
 echo "
 Installing ProtonVPN"
-protonvpn=$(curl https://protonvpn.com/support/official-linux-vpn-debian/ | grep "/stable" | egrep -o "https.+\.deb")
-wget $protonvpn -O ~/Downloads/protonvpn.deb
+protonvpn=$(curl https://protonvpn.com/support/official-linux-vpn-debian/ | grep "/stable" | grep -Eo "https.+\.deb")
+wget "$protonvpn" -O ~/Downloads/protonvpn.deb
 sudo apt install ~/Downloads/protonvpn.deb
 
 echo "Add a custom source list because the package seems to be broken. Check the official instruction first."
@@ -173,7 +173,7 @@ Components: main
 Signed-By: /usr/share/keyrings/protonvpn-stable-archive-keyring.gpg
 
 target ===> /etc/apt/sources.list.d/protonvpn-stable.sources"
-read
+read -r
 
 sudo apt update -y
 sudo apt install proton-vpn-gnome-desktop

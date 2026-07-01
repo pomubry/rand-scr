@@ -96,6 +96,8 @@ unzip -d ~/bin/ tree-sitter-cli-linux-x64.zip
 chmod +x ~/bin/tree-sitter
 rm tree-sitter-cli-linux-x64.zip
 
+git clone https://github.com/pomubry/lazyvim.git ~/.config/nvim/
+
 append "
 # neovim
 export PATH=\$PATH:/opt/nvim-linux-x86_64/bin

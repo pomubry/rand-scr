@@ -82,7 +82,7 @@ rm -rf ~/Downloads/linux-config
 
 append '
 # bin
-export PATH=~/bin:$PATH
+export PATH=$PATH:~/bin
 export QT_QPA_PLATFORMTHEME=qt5ct' ~/.bashrc
 
 # LazyVim

@@ -31,7 +31,8 @@ sudo apt upgrade -y
 echo "
 Installing apt packages"
 sudo apt install -t $codename-backports yt-dlp streamlink -y
-sudo apt install flatpak systemd-timesyncd gnome-software-plugin-flatpak mpv qbittorrent kdenlive mkvtoolnix-gui git wget xclip fastfetch aria2 qt5ct extrepo -y
+sudo apt install flatpak systemd-timesyncd gnome-software-plugin-flatpak mpv qbittorrent kdenlive mkvtoolnix-gui git wget xclip fastfetch aria2 qt5ct extrepo \
+  build-essential lazygit fzf ripgrep fd-find -y
 
 # flatpak
 echo "
@@ -70,20 +71,6 @@ sed -i 's/Icon=libreoffice-calc/Icon=\/usr\/share\/icons\/hicolor\/48x48\/apps\/
 sed -i 's/Name=LibreOffice Calc/Name=LibreOffice Excel/' ~/.local/share/applications/libreoffice-calc.desktop
 sed -i 's/OpenOffice Calc/OpenOffice Excel/' ~/.local/share/applications/libreoffice-calc.desktop
 
-append '
-# bin
-export PATH=~/bin:$PATH
-export QT_QPA_PLATFORMTHEME=qt5ct' ~/.bashrc
-
-curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-sudo rm -rf /opt/nvim-linux-x86_64
-sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-
-append '
-# neovim
-export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
-export EDITOR="nvim"' ~/.bashrc
-
 if [[ $(cat ~/.gitconfig) == *defaultbranch* ]]; then
   echo -e "\nGithub user/defaultbranch config already added. Skipping..."
 else
@@ -92,6 +79,29 @@ $(cat ~/.gitconfig)" >>~/.gitconfig
 fi
 
 rm -rf ~/Downloads/linux-config
+
+append '
+# bin
+export PATH=~/bin:$PATH
+export QT_QPA_PLATFORMTHEME=qt5ct' ~/.bashrc
+
+# LazyVim
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+sudo rm -rf /opt/nvim-linux-x86_64
+sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+rm nvim-linux-x86_64.tar.gz
+
+curl -LO https://github.com/tree-sitter/tree-sitter/releases/latest/download/tree-sitter-cli-linux-x64.zip
+unzip -d ~/bin/ tree-sitter-cli-linux-x64.zip
+chmod +x ~/bin/tree-sitter
+rm tree-sitter-cli-linux-x64.zip
+
+append '
+# neovim
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
+export EDITOR="nvim"
+eval "$(fzf --bash)"' ~/.bashrc
+ln -s "$(which fdfind)" ~/.local/bin/fd
 
 # oh-my-posh
 echo "

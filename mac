@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+# Tested for MacOS only
+
+append() { # $1: text, $2: path
+  sudo=""
+  if [[ $2 != */home* ]]; then
+    sudo="sudo"
+  fi
+
+  $sudo mkdir -p "$(dirname "$2")" && $sudo touch "$2"
+  if [[ $(cat "$2") == *"$1"* ]]; then
+    echo -e "
+        \rThe following lines were already added
+        \r=============
+        \r$1
+        \r============="
+  else
+    cat <<POMU | $sudo tee -a "$2" >/dev/null
+        $1
+POMU
+  fi
+}
+
+# Brew
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+brew install aldente git gh yt-dlp xclip fastfetch starship gromgit/fuse/ntfs-3g-mac aria2 \
+  neovim lazygit fzf ripgrep fd
+
+brew install —cask keyboardcleantool iina mounty macfuse firefox@esr libreoffice localsend bitwarden qbittorrent veracrypt-fuse-t discord mkvtoolnix-app visual-studio-code docker postman pika protonvpn
+
+# Starship
+curl -LO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz
+tar -C ~/Library/Fonts -xzf JetBrainsMono.tar.xz JetBrainsMonoNerdFont-Regular.ttf
+echo 'eval "$(starship init zsh)"' >>~/.zshrc
+source ~/.zshrc
+starship preset catppuccin-powerline -o ~/.config/starship.toml
+
+# Github Login & CLI
+gh auth login
+
+# nvm
+echo "
+Installing nvm"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+
+# Linux config
+echo "
+Adding Linux configs"
+git clone https://github.com/pomubry/linux-config.git ~/Downloads/linux-config
+chmod +x ~/Downloads/linux-config/bin/*
+mkdir ~/bin
+cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/.editorconfig ~
+cp -r ~/Downloads/linux-config/config/. ~/.config
+cp -r ~/Downloads/linux-config/browser ~/Downloads
+
+if [[ $(cat ~/.gitconfig) == *defaultbranch* ]]; then
+  echo -e "\nGithub user/defaultbranch config already added. Skipping..."
+else
+  echo "$(cat ~/Downloads/linux-config/.gitconfig)
+$(cat ~/.gitconfig)" >>~/.gitconfig
+fi
+
+rm -rf ~/Downloads/linux-config
+
+# LazyVim
+git clone https://github.com/pomubry/lazyvim.git ~/nvim
+
+append "
+# neovim
+export EDITOR=nvim
+source <(fzf --zsh)" ~/.zshrc
+ln -s "$(which fdfind)" ~/.local/bin/fd
+
+append "
+# bin
+export PATH=~/bin:\$PATH
+WORDCHARS='*?_-[]~=&;!#$%^(){}<>'" ~/.zshrc
+
+append $'
+# alias
+alias ls=\'ls -G\'
+alias lsa=\'du -sh -- * | sort -h\'
+alias cdpwd=\'cd $(pwd)\'
+alias cddev="cd /Users/pdrome/.mounty/PopoDrome/Backup/Linux/Documents/Dev/"' ~/.zshrc
+
+echo "Done!"

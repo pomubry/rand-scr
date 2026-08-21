@@ -27,7 +27,7 @@ POMU
 brew install aldente git gh yt-dlp xclip fastfetch starship gromgit/fuse/ntfs-3g-mac aria2 \
   neovim lazygit fzf ripgrep fd
 
-brew install —cask keyboardcleantool iina mounty macfuse firefox@esr libreoffice localsend bitwarden qbittorrent veracrypt-fuse-t discord mkvtoolnix-app visual-studio-code docker postman pika protonvpn
+brew install —cask keyboardcleantool iina mounty macfuse iloader firefox@esr libreoffice localsend bitwarden qbittorrent veracrypt-fuse-t discord mkvtoolnix-app visual-studio-code docker postman pika protonvpn
 
 # Starship
 curl -LO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz

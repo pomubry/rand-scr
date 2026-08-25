@@ -66,6 +66,11 @@ rm -rf ~/Downloads/linux-config
 # LazyVim
 git clone https://github.com/pomubry/lazyvim.git ~/nvim
 
+# ollama
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull gemma4:12b
+ollama pull qwen3.5:9b
+
 append "
 # neovim
 export EDITOR=nvim

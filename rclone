@@ -1,0 +1,46 @@
+#!/usr/bin/env zsh
+
+# note to exclude apple system files
+
+SOURCE="/source/path/"
+DEST="remote:destination/path"
+LOG="$HOME/Downloads/rclone-upload.log"
+
+while true; do
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting rclone run..."
+
+  caffeinate -dimsu rclone copy "$SOURCE" "$DEST" \
+    --progress \
+    --transfers=2 \
+    --checkers=4 \
+    --drive-chunk-size=128M \
+    --retries=99 \
+    --retries-sleep=10s \
+    --low-level-retries=30 \
+    --timeout=10m \
+    --contimeout=2m \
+    --bwlimit="8.5M" \
+    --drive-stop-on-upload-limit \
+    --exclude ".DS_Store" \
+    --exclude "._*" \
+    --exclude ".Spotlight-V100/**" \
+    --exclude ".fseventsd/**" \
+    --exclude ".Trashes/**" \
+    --exclude "node_modules/**" \
+    --log-file="$LOG" \
+    --log-level=NOTICE
+
+  EXIT_CODE=$?
+
+  if [ $EXIT_CODE -eq 0 ]; then
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] All files transferred successfully. Finished!"
+    break
+  elif [ $EXIT_CODE -eq 7 ] || [ $EXIT_CODE -eq 8 ]; then
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Hit upload limit or fatal connection drop (Exit code: $EXIT_CODE)."
+    echo "Sleeping for 1 hour to reset quota..."
+    sleep 3600
+  else
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Exited with code $EXIT_CODE. Retrying in 60 seconds..."
+    sleep 60
+  fi
+done

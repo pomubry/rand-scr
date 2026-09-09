@@ -71,6 +71,12 @@ curl -fsSL https://ollama.com/install.sh | sh
 ollama pull gemma4:12b
 ollama pull qwen3.5:9b
 
+append '
+gui:
+  theme:
+    selectedLineBgColor:
+      - "#313244"' ~/Library/Application\ Support/lazygit/config.yml
+
 append "
 # neovim
 export EDITOR=nvim

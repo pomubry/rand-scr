@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+# Tested for MacOS only
+
+append() { # $1: text, $2: path
+  sudo=""
+  if [[ $2 != */home* ]]; then
+    sudo="sudo"
+  fi
+
+  $sudo mkdir -p "$(dirname "$2")" && $sudo touch "$2"
+  if [[ $(cat "$2") == *"$1"* ]]; then
+    echo -e "
+        \rThe following lines were already added
+        \r=============
+        \r$1
+        \r============="
+  else
+    cat <<POMU | $sudo tee -a "$2" >/dev/null
+        $1
+POMU
+  fi
+}

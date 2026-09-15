@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 # Tested for MacOS only
 
 append() { # $1: text, $2: path

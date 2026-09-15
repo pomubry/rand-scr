@@ -33,7 +33,7 @@ source ~/.zshrc
 brew install aldente git gh yt-dlp xclip fastfetch starship aria2 lux \
   neovim lazygit fzf ripgrep fd
 
-brew install --cask keyboardcleantool iina middleclick alt-tab quicklook-video iloader stats flowvision firefox@esr libreoffice localsend bitwarden qbittorrent veracrypt-fuse-t discord mkvtoolnix-app visual-studio-code docker-desktop postman pika protonvpn
+brew install --cask keyboardcleantool iina middleclick alt-tab quicklook-video iloader stats flowvision hiddenbar firefox@esr libreoffice localsend bitwarden qbittorrent veracrypt-fuse-t discord mkvtoolnix-app visual-studio-code docker-desktop postman pika protonvpn
 
 
 # Starship

@@ -37,6 +37,7 @@ brew install --cask keyboardcleantool iina middleclick alt-tab quicklook-video i
 
 
 # Starship
+mkdir ~/.config
 curl -LO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.tar.xz
 tar -C ~/Library/Fonts -xzf JetBrainsMono.tar.xz JetBrainsMonoNerdFont-Regular.ttf
 echo 'eval "$(starship init zsh)"' >>~/.zshrc
@@ -61,11 +62,12 @@ cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/.editorconfig ~
 cp -r ~/Downloads/linux-config/config/. ~/.config
 cp -r ~/Downloads/linux-config/browser ~/Downloads
 
-if [[ $(cat ~/.gitconfig) == *defaultbranch* ]]; then
+echo >> ~/.gitconfig
+if [[ -f ~/.gitconfig && $(cat ~/.gitconfig) == *defaultbranch* ]]; then
   echo -e "\nGithub user/defaultbranch config already added. Skipping..."
 else
   echo "$(cat ~/Downloads/linux-config/.gitconfig)
-$(cat ~/.gitconfig)" >>~/.gitconfig
+$(cat ~/.gitconfig)" > ~/.gitconfig
 fi
 
 rm -rf ~/Downloads/linux-config
@@ -88,6 +90,7 @@ append "
 # neovim
 export EDITOR=nvim
 source <(fzf --zsh)" ~/.zshrc
+mkdir ~/.local/bin
 ln -s "$(which fdfind)" ~/.local/bin/fd
 
 append "

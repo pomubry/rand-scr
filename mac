@@ -73,7 +73,7 @@ fi
 rm -rf ~/Downloads/linux-config
 
 # LazyVim
-git clone https://github.com/pomubry/lazyvim.git ~/nvim
+git clone https://github.com/pomubry/lazyvim.git ~/.config/nvim
 
 # ollama
 curl -fsSL https://ollama.com/install.sh | sh

@@ -106,6 +106,15 @@ alias cddev="cd /Volumes/vc/backup/linux/Documents/dev/"' ~/.zshrc
 
 echo "
 TODO: 
-iina > advanced > load-scripts=yes"
+iina > advanced > load-scripts=yes
+ghostty > theme = Catppuccin Mocha
+screen lock > ask for password immediately
+menu bar > show battery percentage
+display > when connected to tv > mirror entire screen
+desktop and dock > disable lower right corner shortcut
+sound > play feedback when volume changed
+keyboard shortcut > services > 'new terminal tab at folder'
+keyboard autocorrect
+trackpad > app expose"
 
 echo "Done!"

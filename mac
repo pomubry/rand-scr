@@ -23,6 +23,12 @@ POMU
 
 # Brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+echo >> ~/.zshrc
+echo >> /Users/pdrome/.zprofile
+echo 'eval "$(/opt/homebrew/bin/brew shellenv zsh)"' >> /Users/pdrome/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv zsh)"  
+
+source ~/.zshrc
 
 brew install aldente git gh yt-dlp xclip fastfetch starship aria2 lux \
   neovim lazygit fzf ripgrep fd

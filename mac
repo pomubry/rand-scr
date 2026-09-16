@@ -64,6 +64,7 @@ mkdir ~/bin
 cp -r ~/Downloads/linux-config/bin ~/Downloads/linux-config/.editorconfig ~
 cp -r ~/Downloads/linux-config/config/. ~/.config
 cp -r ~/Downloads/linux-config/browser ~/Downloads
+cp -r ~/Downloads/linux-config/mac ~/Downloads
 
 echo >> ~/.gitconfig
 if [[ -f ~/.gitconfig && $(cat ~/.gitconfig) == *defaultbranch* ]]; then

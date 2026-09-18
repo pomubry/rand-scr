@@ -115,7 +115,8 @@ display > when connected to tv > mirror entire screen
 desktop and dock > disable lower right corner shortcut
 sound > play feedback when volume changed
 keyboard shortcut > services > 'new terminal tab at folder'
-keyboard autocorrect
+keyboard > disable autocorrect
+keyboard > disable period on double space
 trackpad > app expose"
 
 echo "Done!"
